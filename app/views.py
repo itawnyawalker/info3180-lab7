@@ -10,6 +10,7 @@ from flask import render_template, request, jsonify, send_file
 from werkzeug.utils import secure_filename
 import os
 from app.forms import UploadForm
+from flask_wtf.csrf import generate_csrf
 
 
 ###
@@ -31,13 +32,15 @@ def upload():
             filename = secure_filename(photo.filename)
             photo.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 
-            upload= [{"message": "File upload succesfull", "filename": filename, "description": description}]
+            return jsonify({"message": "File upload succesfull", "filename": filename, "description": description}),202
 
-            return jsonify(upload=upload),202
         else:
             errors = form_errors(form)
             return jsonify(errors=errors)
 
+@app.route('/api/csrf-token', methods=['GET'])
+def get_csrf():
+    return jsonify({'csrf_token': generate_csrf()})
 
 
 
