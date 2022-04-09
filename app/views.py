@@ -48,6 +48,7 @@ def upload():
 # Here we define a function to collect form errors from Flask-WTF
 # which we can later use
 def form_errors(form):
+    """Form errors"""
     error_messages = []
     """Collects form errors"""
     for field, errors in form.errors.items():

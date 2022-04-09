@@ -1,9 +1,9 @@
 from wsgiref.validate import validator
 from flask_wtf import FlaskForm
-from flask_wtf.file import FIleField, FIleRequired, FileAllowed
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import TextAreaField
-from wtform.validators import DataRequired
+from wtforms.validators import DataRequired
 
 class UploadForm(FlaskForm):
-    description = StringField ('Description', validators=[DataRequired()])
-    photo = FIleFiled('Upload Photo', validators=[FileREquired(),FileAllowed(['jpg','jpeg','png', 'Images only'])])
+    description = TextAreaField ('Description', validators=[DataRequired()])
+    photo = FileField('Upload Photo', validators=[FileRequired(),FileAllowed(['jpg','jpeg','png', 'Images only'])])
