@@ -1,12 +1,23 @@
 <template>
+    
+    <div v-if="success_msg" class="alert alert-success">
+        {{ success_msg }}
+    </div>
+    <div v-else-if="errors.length" class="alert alert-danger">
+        <ul>
+            <li v-for="error in errors">{{ error }}</li>
+        </ul>
+    </div>
+
+
     <form @submit.prevent="uploadPhoto" id="uploadForm" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="description">Description</label>
             <textarea class="form-control" name="description"></textarea>
         </div>
 
-        <div class="form-group">
-            <label for="photo" class="custom-file-label">Upload photo</label>
+        <div class="form-group d-flex flex-column">
+            <label for="photo">Upload photo</label>
             <input class="form-control-file" type="file" name="photo" />
         </div>
 
@@ -21,7 +32,9 @@
 export default {
     data(){
         return {
-            csrf_token: ''
+            csrf_token: '',
+            errors: [],
+            success_msg: ''
         };
     }, 
 
@@ -33,6 +46,7 @@ export default {
         uploadPhoto(){
             let uploadForm = document.getElementById('uploadForm');
             let form_data = new FormData(uploadForm);
+            let self = this;
 
             fetch("/api/upload", {
                 method: 'POST',
@@ -47,6 +61,8 @@ export default {
                 .then(function (data) {
                     //display a success message
                     console.log(data);
+                    self.errors = data.errors;
+                    self.success_msg = data.message;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -70,12 +86,12 @@ export default {
 
 <style>
 .form-group{
-    max-width: 50%;
     margin-bottom: 15px;
 } 
 
 label{
     font-size: 16px;
+    margin-botton: 10px;
 }
 
 </style>
